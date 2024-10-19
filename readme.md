@@ -1,9 +1,11 @@
-### Setup your database
+### Setup your project
 
 1. Create your db
-2. Running script
+2. Set your .env or copy from .env.example
+3. Running script
 
 ```
+npm install
 npm run migrate:up
 npm start
 ```
