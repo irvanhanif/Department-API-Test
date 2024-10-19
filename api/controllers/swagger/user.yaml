@@ -1,0 +1,582 @@
+components:
+  schemas:
+    user:
+      type: object
+      properties:
+        email:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        confirmPassword:
+          type: string
+        born:
+          type: string
+          format: date
+        idRole:
+          type: integer
+        idDepartment:
+          type: integer
+
+tags:
+  name: Users
+  description: The user managing API
+
+/api/user/register:
+  post:
+    summary: Create a user
+    description: Returns new data user
+    tags: [Users]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/user"
+          example:
+            email: "alex.smith@example.com"
+            username: "alexsmith"
+            password: "S3cureP@ss"
+            confirmPassword: "S3cureP@ss"
+            born: "1992-11-30"
+            idDepartment: 2
+    responses:
+      201:
+        description: user successfully created
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    email:
+                      type: string
+                    username:
+                      type: string
+                    born:
+                      type: string
+                      format: date
+                    idDepartment:
+                      type: int
+                  example:
+                    id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    email: "alex.smith@example.com"
+                    username: "alexsmith"
+                    born: "1992-11-30"
+                    idRole: null
+                    idDepartment: 2
+      400:
+        description: Error incorrect password
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: string
+                  example: "Password is not same with confirm password"
+      409:
+        description: Error detect existing user
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: string
+                  example: "User is exist"
+      500:
+        description: Error default response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: object
+                  example: {}
+/api/user/login:
+  post:
+    summary: Login as user
+    description: Returns data user and token
+    tags: [Users]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              emailOrUsername:
+                type: string
+                example: "admin"
+              password:
+                type: string
+                example: "4dm1n"
+    responses:
+      200:
+        description: user successfully login
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                data:
+                  type: object
+                  properties:
+                    user:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        email:
+                          type: string
+                        username:
+                          type: string
+                        born:
+                          type: string
+                          format: date
+                        idDepartment:
+                          type: int
+                      example:
+                        id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                        email: "alex.smith@example.com"
+                        username: "alexsmith"
+                        born: "1992-11-30"
+                        idRole: 2
+                        idDepartment: 2
+                    token:
+                      type: string
+                      example: "eyJhTOkenxxxxxxxxxxxxx"
+      404:
+        description: Error user not registered
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: string
+                  example: "User not registered"
+      401:
+        description: Error invalid password input
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: string
+                  example: "Incorrect password"
+      500:
+        description: Error default response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: object
+                  example: {}
+
+/api/user/all:
+  get:
+    summary: Get All User
+    description: Returns all user
+    tags: [Users]
+    parameters:
+      - in: query
+        name: from
+        required: false
+        schema:
+          type: integer
+          example: 2
+      - in: query
+        name: get
+        required: false
+        schema:
+          type: integer
+          example: 2
+    responses:
+      200:
+        description: A successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      email:
+                        type: string
+                      username:
+                        type: string
+                      born:
+                        type: string
+                        format: date
+                  example:
+                    - email: "alex.smith@example.com"
+                      username: "alexsmith"
+                      born: "1992-11-30"
+                      role: "Editor"
+                      description: "Responsible for creating and managing content within the platform, but with limited access to user management and settings."
+                      permission: '["create_content","edit_content","delete_content","view_reports"]'
+                      idUser: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                      idRole: 2
+                      idDepartment: 2
+      500:
+        description: Error default response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: object
+                  example: {}
+/api/user/detail/{id}:
+  get:
+    summary: Get Detail User
+    description: Returns detail data user
+    tags: [Users]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: A successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    email:
+                      type: string
+                    username:
+                      type: string
+                    born:
+                      type: string
+                      format: date
+                  example:
+                    email: "alex.smith@example.com"
+                    username: "alexsmith"
+                    born: "1992-11-30"
+                    role: "Editor"
+                    description: "Responsible for creating and managing content within the platform, but with limited access to user management and settings."
+                    permission: '["create_content","edit_content","delete_content","view_reports"]'
+                    idRole: 2
+                    idDepartment: 2
+                    idUser: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+      403:
+        description: Error user cant accessing data
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: string
+                  example: "You cant access this data"
+      404:
+        description: Data not found response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: string
+                  example: "Data User not found"
+      500:
+        description: Error default response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: object
+                  example: {}
+
+/api/user/{id}:
+  put:
+    summary: Update Detail User
+    description: Returns data updated user
+    tags: [Users]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/user"
+          example:
+            email: "alex.smith@example.com"
+            username: "alexsmith"
+            born: "2000-11-30"
+    responses:
+      200:
+        description: A successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    email:
+                      type: string
+                    username:
+                      type: string
+                    born:
+                      type: string
+                      format: date
+                    idRole:
+                      type: integer
+                    idDepartment:
+                      type: integer
+                  example:
+                    id: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                    email: "alex.smith@example.com"
+                    username: "alexsmith"
+                    born: "2000-11-30"
+                    idRole: 2
+                    idDepartment: 2
+      403:
+        description: Error user cant accessing data
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: string
+                  example: "You cant access this data"
+      404:
+        description: Data not found response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: string
+                  example: "Data User not found"
+      500:
+        description: Error default response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: object
+                  example: {}
+  delete:
+    summary: Delete User
+    tags: [Users]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: A successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                data:
+                  type: string
+                  example: "Success Delete User"
+      404:
+        description: Data not found response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: string
+                  example: "Data User not found"
+      500:
+        description: Error default response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: object
+                  example: {}
+/api/user/logout:
+  delete:
+    summary: Logout from User
+    tags: [Users]
+    responses:
+      200:
+        description: A successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                data:
+                  type: string
+                  example: "Success Logout"
+      500:
+        description: Error default response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: object
+                  example: {}

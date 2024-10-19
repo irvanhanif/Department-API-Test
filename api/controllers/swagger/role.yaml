@@ -1,0 +1,361 @@
+components:
+  schemas:
+    role:
+      type: object
+      properties:
+        role:
+          type: string
+        description:
+          type: string
+          required: false
+        permission:
+          type: string
+          required: false
+        idUser:
+          type: string
+
+tags:
+  name: Roles
+  description: The role managing API
+
+/api/role:
+  post:
+    summary: Create a role for user
+    description: Returns new data role
+    tags: [Roles]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/role"
+          example:
+            role: "Editor"
+            description: "Responsible for creating and managing content within the platform, but with limited access to user management and settings."
+            permission: '["create_content","edit_content","delete_content","view_reports"]'
+            idUser: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+
+    responses:
+      201:
+        description: department successfully created
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    role:
+                      type: string
+                    description:
+                      type: string
+                      required: false
+                    permission:
+                      type: string
+                      required: false
+                    idUser:
+                      type: string
+                  example:
+                    id: 2
+                    role: "Editor"
+                    description: "Responsible for creating and managing content within the platform, but with limited access to user management and settings."
+                    permission: '["create_content","edit_content","delete_content","view_reports"]'
+                    idUser: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+      500:
+        description: Error default response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: object
+                  example: {}
+
+  get:
+    summary: Get All role user
+    description: Returns all role user
+    tags: [Roles]
+    responses:
+      200:
+        description: A successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      role:
+                        type: string
+                      description:
+                        type: string
+                        required: false
+                      permission:
+                        type: string
+                        required: false
+                      idUser:
+                        type: string
+                  example:
+                    - id: 2
+                      role: "Editor"
+                      description: "Responsible for creating and managing content within the platform, but with limited access to user management and settings."
+                      permission: '["create_content","edit_content","delete_content","view_reports"]'
+                      idUser: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+      500:
+        description: Error default response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: object
+                  example: {}
+
+/api/role/{id}:
+  get:
+    summary: Get Detail role user
+    description: Returns detail data role user
+    tags: [Roles]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          example: 2
+    responses:
+      200:
+        description: A successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    role:
+                      type: string
+                    description:
+                      type: string
+                      required: false
+                    permission:
+                      type: string
+                      required: false
+                    idUser:
+                      type: string
+                  example:
+                    id: 2
+                    role: "Editor"
+                    description: "Responsible for creating and managing content within the platform, but with limited access to user management and settings."
+                    permission: '["create_content","edit_content","delete_content","view_reports"]'
+                    idUser: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+      404:
+        description: Data not found response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: string
+                  example: "Data Role not found"
+      500:
+        description: Error default response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: object
+                  example: {}
+
+  put:
+    summary: Update Detail Role of User
+    description: Returns data updated role user
+    tags: [Roles]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          example: 2
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/department"
+          example:
+            role: "Editor"
+            description: "Responsible for creating and managing content within the platform, but with limited access to user management and settings."
+            permission: '["create_content", "delete_content"]'
+            idUser: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    responses:
+      200:
+        description: A successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    role:
+                      type: string
+                    description:
+                      type: string
+                      required: false
+                    permission:
+                      type: string
+                      required: false
+                    idUser:
+                      type: string
+                  example:
+                    id: 2
+                    role: "Editor"
+                    description: "Responsible for creating and managing content within the platform, but with limited access to user management and settings."
+                    permission: '["create_content", "delete_content"]'
+                    idUser: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+      404:
+        description: Data not found response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: string
+                  example: "Data Role not found"
+      500:
+        description: Error default response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: object
+                  example: {}
+
+  delete:
+    summary: Delete Role User
+    tags: [Roles]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          example: 2
+    responses:
+      200:
+        description: A successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                data:
+                  type: string
+                  example: "Success delete role user"
+      404:
+        description: Data not found response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: string
+                  example: "Data Role not found"
+      500:
+        description: Error default response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: object
+                  example: {}

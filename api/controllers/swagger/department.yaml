@@ -1,0 +1,365 @@
+components:
+  schemas:
+    department:
+      type: object
+      properties:
+        name:
+          type: string
+        code:
+          type: string
+        location:
+          type: string
+        description:
+          type: string
+        contact:
+          type: string
+
+tags:
+  name: Departments
+  description: The department managing API
+
+/api/department:
+  post:
+    summary: Create a department
+    description: Returns new data department
+    tags: [Departments]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/department"
+          example:
+            name: "Information Technology"
+            code: "IT001"
+            location: "Head Office - Building A"
+            description: "Responsible for managing and overseeing all technical infrastructure and systems within the company, including hardware, software, network, and IT services."
+            contact: '{"email": "it-dept@company.com", "phone": "+1-555-123-4567"}'
+    responses:
+      201:
+        description: department successfully created
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    code:
+                      type: string
+                    location:
+                      type: string
+                    description:
+                      type: string
+                    contact:
+                      type: string
+                  example:
+                    id: 1
+                    name: "Information Technology"
+                    code: "IT001"
+                    location: "Head Office - Building A"
+                    description: "Responsible for managing and overseeing all technical infrastructure and systems within the company, including hardware, software, network, and IT services."
+                    contact: '{"email": "it-dept@company.com", "phone": "+1-555-123-4567"}'
+      500:
+        description: Error default response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: object
+                  example: {}
+
+  get:
+    summary: Get All Department
+    description: Returns all department
+    tags: [Departments]
+    responses:
+      200:
+        description: A successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      code:
+                        type: string
+                      location:
+                        type: string
+                      description:
+                        type: string
+                      contact:
+                        type: string
+                  example:
+                    - id: 1
+                      name: "Information Technology"
+                      code: "IT001"
+                      location: "Head Office - Building A"
+                      description: "Responsible for managing and overseeing all technical infrastructure and systems within the company, including hardware, software, network, and IT services."
+                      contact: '{"email": "it-dept@company.com", "phone": "+1-555-123-4567"}'
+      500:
+        description: Error default response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: object
+                  example: {}
+
+/api/department/{id}:
+  get:
+    summary: Get Detail Department
+    description: Returns detail data department
+    tags: [Departments]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          example: 1
+    responses:
+      200:
+        description: A successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    code:
+                      type: string
+                    location:
+                      type: string
+                    description:
+                      type: string
+                    contact:
+                      type: string
+                  example:
+                    id: 1
+                    name: "Information Technology"
+                    code: "IT001"
+                    location: "Head Office - Building A"
+                    description: "Responsible for managing and overseeing all technical infrastructure and systems within the company, including hardware, software, network, and IT services."
+                    contact: '{"email": "it-dept@company.com", "phone": "+1-555-123-4567"}'
+      404:
+        description: Data not found response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: string
+                  example: "Data Department not found"
+      500:
+        description: Error default response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: object
+                  example: {}
+  put:
+    summary: Update Detail Department
+    description: Returns data updated department
+    tags: [Departments]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          example: 1
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/department"
+          example:
+            name: "Information Technology and AI Learning"
+            code: "IT001"
+            location: "Head Office - Building B"
+            description: "Responsible for managing and overseeing all technical infrastructure and systems within the company, including hardware, software, network, and IT services."
+            contact: '{"email": "it-dept@company.com", "phone": "+1-555-123-4567"}'
+    responses:
+      200:
+        description: A successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    code:
+                      type: string
+                    location:
+                      type: string
+                    description:
+                      type: string
+                    contact:
+                      type: string
+                  example:
+                    id: 1
+                    name: "Information Technology and AI Learning"
+                    code: "IT001"
+                    location: "Head Office - Building B"
+                    description: "Responsible for managing and overseeing all technical infrastructure and systems within the company, including hardware, software, network, and IT services."
+                    contact: '{"email": "it-dept@company.com", "phone": "+1-555-123-4567"}'
+      404:
+        description: Data not found response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: string
+                  example: "Data Department not found"
+      500:
+        description: Error default response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: object
+                  example: {}
+
+  delete:
+    summary: Delete Department
+    tags: [Departments]
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          example: 1
+    responses:
+      200:
+        description: A successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                data:
+                  type: string
+                  example: "Success delete department"
+      404:
+        description: Data not found response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: string
+                  example: "Data Department not found"
+      500:
+        description: Error default response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: false
+                data:
+                  type: array
+                  example: []
+                message:
+                  type: object
+                  example: {}
